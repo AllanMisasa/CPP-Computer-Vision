@@ -1,3 +1,5 @@
+/*
+
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 #include "opencv2/imgcodecs.hpp"
@@ -7,7 +9,7 @@
 using namespace cv;
 using namespace std;
 
-int main() {
+int filter() {
 	// Set path to image
 	std::string image_path = samples::findFile("starry_night.jpg");
 	
@@ -34,3 +36,4 @@ int main() {
 	}
 	return 0;
 }
+*/

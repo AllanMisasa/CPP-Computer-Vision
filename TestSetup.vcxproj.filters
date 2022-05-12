@@ -21,5 +21,8 @@
     <ClCompile Include="Filters.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="image_histogram.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
