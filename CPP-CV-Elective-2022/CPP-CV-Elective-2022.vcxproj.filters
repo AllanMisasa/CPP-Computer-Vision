@@ -32,5 +32,8 @@
     <ClInclude Include="thresholding.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="analysis.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

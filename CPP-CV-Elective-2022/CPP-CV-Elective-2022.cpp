@@ -3,6 +3,7 @@
 #include <iostream>
 #include "cvh.h"
 #include "detectors.h"
+#include "analysis.h"
 
 using namespace cv;
 
@@ -13,7 +14,7 @@ int main(int argc, char** argv) // arguments optional for command line parsing
     // CommandLineParser parser(argc, argv, "{@input | fruits.jpg | input image}");
     // std::string image_path = samples::findFile("starry_night.jpg");
 
-    src = imread("C:/opencv_images/shapes.jpg", IMREAD_COLOR);  // Load source image as color
+    src = imread("C:/opencv_images/foggy_forest.jpg", IMREAD_COLOR);  // Load source image as color
     if (src.empty())                                            // Exception handling if file is not found
     {
         std::cout << "Could not open or find the image!\n" << std::endl;
@@ -28,5 +29,7 @@ int main(int argc, char** argv) // arguments optional for command line parsing
     //CannyThreshold(0, 0);
     //waitKey(0);
     //return 0;
-    circle_detector(src_gray);
+    //circle_detector(src_gray);
+    //Histogram_color(src);
+    
 }

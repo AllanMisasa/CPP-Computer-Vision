@@ -138,6 +138,7 @@
     <ClInclude Include="cvh.h" />
     <ClInclude Include="detectors.h" />
     <ClInclude Include="filters.h" />
+    <ClInclude Include="analysis.h" />
     <ClInclude Include="thresholding.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
