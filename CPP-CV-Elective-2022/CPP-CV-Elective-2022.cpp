@@ -4,6 +4,7 @@
 #include "cvh.h"
 #include "detectors.h"
 #include "analysis.h"
+#include "thresholding.h"
 
 using namespace cv;
 
@@ -14,7 +15,7 @@ int main(int argc, char** argv) // arguments optional for command line parsing
     // CommandLineParser parser(argc, argv, "{@input | fruits.jpg | input image}");
     // std::string image_path = samples::findFile("starry_night.jpg");
 
-    src = imread("C:/opencv_images/foggy_forest.jpg", IMREAD_COLOR);  // Load source image as color
+    src = imread("C:/opencv_images/boat.jpg", IMREAD_GRAYSCALE);  // Load source image as color
     if (src.empty())                                            // Exception handling if file is not found
     {
         std::cout << "Could not open or find the image!\n" << std::endl;
@@ -23,7 +24,7 @@ int main(int argc, char** argv) // arguments optional for command line parsing
     }
     //src = resize_image(src, 600, 400);
     // dst.create(src.size(), src.type());
-    cvtColor(src, src_gray, COLOR_BGR2GRAY);                    // Convert image to grayscale
+    //cvtColor(src, src_gray, COLOR_BGR2GRAY);                    // Convert image to grayscale
     //namedWindow(window_name, WINDOW_AUTOSIZE);
     //createTrackbar("Min Threshold:", window_name, &lowThreshold, max_lowThreshold, CannyThreshold);
     //CannyThreshold(0, 0);
@@ -31,5 +32,6 @@ int main(int argc, char** argv) // arguments optional for command line parsing
     //return 0;
     //circle_detector(src_gray);
     //Histogram_color(src);
-    
+    //Blob_detector(src_gray);
+    OtsuThreshold(src);
 }

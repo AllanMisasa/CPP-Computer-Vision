@@ -1,6 +1,7 @@
 #pragma once
 #include "opencv2/imgproc.hpp"
 #include "opencv2/highgui.hpp"
+#include <opencv2/features2d.hpp>
 #include <iostream>
 
 using namespace cv;
@@ -30,4 +31,36 @@ Mat circle_detector(Mat src) {
 	waitKey();
 
 	return src;
+}
+
+Mat Blob_detector(Mat src) {
+	SimpleBlobDetector::Params params; 	// Setup SimpleBlobDetector parameters.
+
+	params.minThreshold = 10;
+	params.maxThreshold = 200;
+
+	params.filterByArea = true;
+	params.minArea = 1500;
+
+	params.filterByCircularity = true;
+	params.minCircularity = 0.1;
+
+	params.filterByConvexity = true;
+	params.minConvexity = 0.87;
+
+	params.filterByInertia = true;
+	params.minInertiaRatio = 0.01;
+
+	Mat image_with_keypoints;
+	Ptr<SimpleBlobDetector> detector = SimpleBlobDetector::create(params);
+	std::vector<KeyPoint> keypoints;
+	detector->detect(src, keypoints);
+	drawKeypoints(src, 
+					keypoints, 
+					image_with_keypoints, 
+					Scalar(0, 0, 255),
+					DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
+	imshow("Keypoints", image_with_keypoints);
+	waitKey(0);
+	return image_with_keypoints;
 }
