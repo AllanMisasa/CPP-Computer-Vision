@@ -73,3 +73,37 @@ static void* Histogram_color(Mat src) {
     waitKey();
     return EXIT_SUCCESS;
 }
+
+Mat apply_mask(Mat& src, Mat& mask, Mat& result) {
+    src.copyTo(result, mask);
+    return result;
+}
+
+void examine_colors(Mat src) {
+    Mat masked_img, mask, imghsv, result;
+    int bmin = 0, gmin = 110, rmin = 153;
+    int bmax = 19, gmax = 240, rmax = 255;
+    //cvtColor(src, imghsv, COLOR_BGR2HSV);
+
+    namedWindow("Trackbars", (640, 200));
+    createTrackbar("Blue min", "Trackbars", &bmin, 255);
+    createTrackbar("Blue max", "Trackbars", &bmax, 255);
+    createTrackbar("Green min", "Trackbars", &gmin, 255);
+    createTrackbar("Green max", "Trackbars", &gmax, 255);
+    createTrackbar("Red min", "Trackbars", &rmin, 255);
+    createTrackbar("Red max", "Trackbars", &rmax, 255);
+
+    while (true) {
+        Scalar lower(bmin, gmin, rmin);
+        Scalar upper(bmax, gmax, rmax);
+
+        inRange(src, lower, upper, mask);
+        apply_mask(src, mask, masked_img);
+
+        imshow("Source image", src);
+        imshow("Image mask", mask);
+        imshow("Masked image", masked_img);
+
+        waitKey(1);
+    }
+}

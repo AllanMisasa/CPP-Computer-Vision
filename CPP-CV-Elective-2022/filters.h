@@ -24,3 +24,11 @@ Mat RemoveColor(Mat src, int color)
 	}
 	return src;
 }
+
+void getContours(Mat dilated, Mat src) {
+	vector<vector<Point>> contours;
+	vector<Vec4i> hierarchy;
+
+	findContours(dilated, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+	drawContours(src, contours, -1, Scalar(255, 0, 255), 2);
+}
