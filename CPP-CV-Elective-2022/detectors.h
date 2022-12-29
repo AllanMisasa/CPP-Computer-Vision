@@ -2,6 +2,7 @@
 #include "opencv2/imgproc.hpp"
 #include "opencv2/highgui.hpp"
 #include <opencv2/features2d.hpp>
+//#include <opencv2/xfeatures2d.hpp>
 #include <iostream>
 
 using namespace cv;
@@ -53,7 +54,7 @@ Mat Blob_detector(Mat src) {
 
 	Mat image_with_keypoints;
 	Ptr<SimpleBlobDetector> detector = SimpleBlobDetector::create(params);
-	std::vector<KeyPoint> keypoints;
+	vector<KeyPoint> keypoints;
 	detector->detect(src, keypoints);
 	drawKeypoints(src, 
 					keypoints, 
@@ -63,4 +64,63 @@ Mat Blob_detector(Mat src) {
 	imshow("Keypoints", image_with_keypoints);
 	waitKey(0);
 	return image_with_keypoints;
+}
+
+void getContours(Mat dilated, Mat src) {
+	vector<vector<Point>> contours;
+	vector<Vec4i> hierarchy;
+	 
+	findContours(dilated, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+	drawContours(src, contours, -1, Scalar(255, 0, 255), 2);
+	for (int i = 0; i < contours.size(); i++) {
+		int area = contourArea(contours[i]);
+		cout << area << endl;
+	}
+}
+
+void contours(Mat img) {
+	Mat imgGray, imgBlur, edges, dilated;
+	Mat kernel = getStructuringElement(MORPH_RECT, Size(3, 3));
+	cvtColor(img, imgGray, COLOR_BGR2GRAY);
+	GaussianBlur(imgGray, imgBlur, Size(3, 3), 3, 0);
+	Canny(imgBlur, edges, 25, 75);
+	dilate(edges, dilated, kernel);
+
+	getContours(dilated, img);
+
+	imshow("Contoured image", img);
+	waitKey(0);
+}
+
+Mat sift_keypoints(Mat image) {
+
+	// Create a SIFT detector object
+	Ptr<SIFT> detector = SIFT::create();
+
+	// Detect keypoints in the image
+	std::vector<KeyPoint> keypoints;
+	detector->detect(image, keypoints);
+
+	// Draw the keypoints on the image
+	Mat keypoint_image;
+	drawKeypoints(image, keypoints, keypoint_image, Scalar::all(-1), DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
+
+	return keypoint_image;
+}
+
+void template_matching(Mat image, Mat temp) {
+	// Perform template matching
+	Mat result;
+	matchTemplate(image, temp, result, TM_CCOEFF_NORMED);
+
+	// Find the location of the best match
+	double minVal; double maxVal; Point minLoc; Point maxLoc;
+	minMaxLoc(result, &minVal, &maxVal, &minLoc, &maxLoc, Mat());
+
+	// Draw a rectangle around the best match
+	rectangle(image, maxLoc, Point(maxLoc.x + temp.cols, maxLoc.y + temp.rows), Scalar(0, 255, 0), 2);
+
+	// Display the image with the rectangle
+	imshow("Image", image);
+	waitKey(0);
 }

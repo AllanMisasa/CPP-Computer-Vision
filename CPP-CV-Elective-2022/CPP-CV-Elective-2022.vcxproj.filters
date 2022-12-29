@@ -35,5 +35,8 @@
     <ClInclude Include="analysis.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="chains.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

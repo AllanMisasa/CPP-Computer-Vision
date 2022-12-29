@@ -7,6 +7,14 @@
 using namespace cv;
 using namespace std;
 
+int get_dimensions(Mat src) {
+    int width = src.cols;
+    int height = src.rows;
+    cout << "Width of image in pixels: " << width;
+    cout << "Height of image in pixels: " << height;
+    return width, height;
+}
+
 static void* Histogram_gray(Mat src) {
 	int histSize = 256;
 	float range[] = { 0, 256 };
@@ -81,8 +89,8 @@ Mat apply_mask(Mat& src, Mat& mask, Mat& result) {
 
 void examine_colors(Mat src) {
     Mat masked_img, mask, imghsv, result;
-    int bmin = 0, gmin = 110, rmin = 153;
-    int bmax = 19, gmax = 240, rmax = 255;
+    int bmin = 50, gmin = 50, rmin = 50;
+    int bmax = 100, gmax = 100, rmax = 100;
     //cvtColor(src, imghsv, COLOR_BGR2HSV);
 
     namedWindow("Trackbars", (640, 200));

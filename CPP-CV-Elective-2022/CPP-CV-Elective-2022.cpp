@@ -5,23 +5,37 @@
 #include "detectors.h"
 #include "analysis.h"
 #include "thresholding.h"
+#include "chains.h"
 
 using namespace cv;
 
-Mat src, src_gray, dst; // Define image types
+Mat temp, src, src_gray, imgGray, imgBlur, dst, edges, dilated, eroded; // Define image types
+
+void document_scanner() {
+    src = imread("C:/opencv_images/shapes_color.jpg");
+
+}
 
 int main(int argc, char** argv) // arguments optional for command line parsing
 {
     // CommandLineParser parser(argc, argv, "{@input | fruits.jpg | input image}");
     // std::string image_path = samples::findFile("starry_night.jpg");
 
-    src = imread("C:/opencv_images/shapes_color.jpg");  // Load source image as color
+    src = imread("C:/opencv_images/zebra.jpg", IMREAD_GRAYSCALE);  // Load source image as color
     if (src.empty())                                            // Exception handling if file is not found
     {
         std::cout << "Could not open or find the image!\n" << std::endl;
         std::cout << "Usage: " << argv[0] << " <Input image>" << std::endl;
         return -1;
     }
+
+    temp = imread("C:/opencv_images/zebra_temp.jpg", IMREAD_GRAYSCALE);
+    temp = preprocessing(temp);
+    temp = resize_image(temp, 256, 256);
+    
+    src = preprocessing(src);
+
+    template_matching(src, temp);
 
     //src = resize_image(src, 600, 400);
     // dst.create(src.size(), src.type());
@@ -35,5 +49,6 @@ int main(int argc, char** argv) // arguments optional for command line parsing
     //Histogram_color(src);
     //Blob_detector(src_gray);
     //OtsuThreshold(src);
-    examine_colors(src);
+    //examine_colors(src);
+    //contours(src);
 }
