@@ -135,7 +135,7 @@
     <ClCompile Include="CPP-CV-Elective-2022.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cvh.h" />
+    <ClInclude Include="basic.h" />
     <ClInclude Include="detectors.h" />
     <ClInclude Include="filters.h" />
     <ClInclude Include="analysis.h" />

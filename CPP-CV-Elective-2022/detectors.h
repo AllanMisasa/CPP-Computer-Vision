@@ -2,7 +2,6 @@
 #include "opencv2/imgproc.hpp"
 #include "opencv2/highgui.hpp"
 #include <opencv2/features2d.hpp>
-//#include <opencv2/xfeatures2d.hpp>
 #include <iostream>
 
 using namespace cv;
@@ -108,7 +107,7 @@ Mat sift_keypoints(Mat image) {
 	return keypoint_image;
 }
 
-void template_matching(Mat image, Mat temp) {
+void simple_match(Mat image, Mat temp) {
 	// Perform template matching
 	Mat result;
 	matchTemplate(image, temp, result, TM_CCOEFF_NORMED);
@@ -118,9 +117,56 @@ void template_matching(Mat image, Mat temp) {
 	minMaxLoc(result, &minVal, &maxVal, &minLoc, &maxLoc, Mat());
 
 	// Draw a rectangle around the best match
-	rectangle(image, maxLoc, Point(maxLoc.x + temp.cols, maxLoc.y + temp.rows), Scalar(0, 255, 0), 2);
+	rectangle(image, maxLoc, Point(maxLoc.x + temp.cols, maxLoc.y + temp.rows), Scalar(255, 0, 255), 2);
 
 	// Display the image with the rectangle
 	imshow("Image", image);
 	waitKey(0);
+}
+
+int match(Mat ref, Mat tpl)
+{
+
+	Mat gref, gtpl;
+	cvtColor(ref, gref, COLOR_BGR2GRAY);									 // Convert input image to grayscale
+	cvtColor(tpl, gtpl, COLOR_BGR2GRAY);									 // Convert template image to grayscale
+
+	const int low_canny = 110;												 // Set low threshold of the Canny edge detection
+	Canny(gref, gref, low_canny, low_canny * 3);							 // High threshold is 3x of low
+	Canny(gtpl, gtpl, low_canny, low_canny * 3);
+
+	imshow("file", gref);
+	imshow("template", gtpl);
+
+	Mat res_32f(ref.rows - tpl.rows + 1, ref.cols - tpl.cols + 1, CV_32FC1); // Set up result image - 32 bits floating point, 1 channel
+	matchTemplate(gref, gtpl, res_32f, TM_CCOEFF_NORMED);					 // Template match and mark matched objects in res
+
+	Mat res;
+	res_32f.convertTo(res, CV_8U, 255.0);									 // After matching we do not need the precision of 32F, so we downscale to 8bit uint representation
+	imshow("result", res);
+
+	int size = ((tpl.cols + tpl.rows) / 4) * 2 + 1;							 // Force size to be odd
+	adaptiveThreshold(res, res, 255, ADAPTIVE_THRESH_MEAN_C,				 // Adaptive thresholding on 
+					  THRESH_BINARY, size, -64);
+	imshow("result_thresh", res);
+
+	while (1)																 // This loop fills rectangles around matched objects
+	{
+		double minval, maxval;
+		Point minloc, maxloc;
+		minMaxLoc(res, &minval, &maxval, &minloc, &maxloc);
+
+		if (maxval > 0)
+		{
+			rectangle(ref, maxloc, Point(maxloc.x + tpl.cols, maxloc.y + tpl.rows), Scalar(0, 255, 0), 2);
+			floodFill(res, maxloc, 0); //mark drawn blob
+		}
+		else
+			break;
+	}
+
+	imshow("final", ref);
+	waitKey(0);
+
+	return 0;
 }
