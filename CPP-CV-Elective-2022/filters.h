@@ -36,36 +36,38 @@ void getContours(Mat dilated, Mat src) {
 	drawContours(src, contours, -1, Scalar(255, 0, 255), 2);
 }
 */
-Mat backgroundRemovalSimple(Mat src) {
-	Mat gray, blur, edges;
-	Mat kernel = getStructuringElement(MORPH_RECT, Size(3, 3));
-	cvtColor(src, gray, COLOR_BGR2GRAY);
-	GaussianBlur(gray, blur, Size(5, 5), 0);
-	Canny(blur, edges, 15, 150);
-	dilate(edges, edges, kernel);
-	erode(edges, edges, kernel);
 
-	vector<vector<Point>> contours;
-	vector<Vec4i> hierarchy;
+Mat backgroundRemovalSimple(Mat frame, Mat src) {
+	Mat hsv, mask, res;
+	cvtColor(frame, hsv, COLOR_BGR2HSV);
 
-	findContours(edges, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
-	drawContours(src, contours, -1, Scalar(255, 0, 255), 2);
-	return src;
+	inRange(hsv, Scalar(30, 0, 0), Scalar(100, 255, 255), mask);
+
+	//frame = frame - res;
+	frame.setTo(Scalar(0, 0, 0), mask);
+	bitwise_or(frame, src, res);
+	return res;
 }
 
 
 Mat backgroundRemovalComplex(Mat src) {
 	Mat foregroundMask, foregroundImg, backgroundImg;
 	Ptr<BackgroundSubtractor> backSub;
-	backSub = createBackgroundSubtractorMOG2();
+
+	backSub = createBackgroundSubtractorMOG2();						// Initialize backgroundsubtractor
+
 	if (foregroundMask.empty()) {
 		foregroundMask.create(src.size(), src.type());
 	}
-	backSub->apply(src, foregroundMask, true ? -1 : 0);
+	backSub->apply(src, foregroundMask, true ? -1 : 0);				// Use backgroundsubtractor to find the foreground mask
+
 	GaussianBlur(foregroundMask, foregroundMask, Size(5, 5), 3.5, 3.5);
 	threshold(foregroundMask, foregroundMask, 10, 255, THRESH_BINARY);
-	foregroundImg = Scalar::all(0);
+
+	foregroundImg = Scalar::all(0);									
+
 	src.copyTo(foregroundImg, foregroundMask);
 	backSub->getBackgroundImage(backgroundImg);
+
 	return foregroundMask;
 }

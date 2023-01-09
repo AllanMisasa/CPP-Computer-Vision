@@ -7,6 +7,8 @@
 using namespace cv;
 using namespace std;
 
+
+
 int get_dimensions(Mat src) {
     int width = src.cols;
     int height = src.rows;
@@ -90,7 +92,7 @@ Mat apply_mask(Mat& src, Mat& mask, Mat& result) {
 void examine_colors(Mat src) {
     Mat masked_img, mask, imghsv, result;
     int bmin = 50, gmin = 50, rmin = 50;
-    int bmax = 100, gmax = 100, rmax = 100;
+    int bmax = 200, gmax = 200, rmax = 200;
     //cvtColor(src, imghsv, COLOR_BGR2HSV);
 
     namedWindow("Trackbars", (640, 200));
@@ -109,6 +111,60 @@ void examine_colors(Mat src) {
         apply_mask(src, mask, masked_img);
 
         imshow("Source image", src);
+        imshow("Image mask", mask);
+        imshow("Masked image", masked_img);
+
+        waitKey(1);
+    }
+}
+
+void examine_colors_hsv(Mat src) {
+    Mat masked_img, mask, imghsv, result;
+    int hmin = 50, smin = 50, vmin = 50;
+    int hmax = 200, smax = 200, vmax = 200;
+    cvtColor(src, imghsv, COLOR_BGR2HSV);
+
+    namedWindow("Trackbars", (640, 200));
+    createTrackbar("Blue min", "Trackbars", &hmin, 255);
+    createTrackbar("Blue max", "Trackbars", &hmax, 255);
+    createTrackbar("Green min", "Trackbars", &smin, 255);
+    createTrackbar("Green max", "Trackbars", &smax, 255);
+    createTrackbar("Red min", "Trackbars", &vmin, 255);
+    createTrackbar("Red max", "Trackbars", &vmax, 255);
+
+    while (true) {
+        Scalar lower(hmin, smin, vmin);
+        Scalar upper(hmax, smax, vmax);
+
+        inRange(imghsv, lower, upper, mask);
+        apply_mask(imghsv, mask, masked_img);
+
+        imshow("Source image", imghsv);
+        imshow("Image mask", mask);
+        imshow("Masked image", masked_img);
+
+        waitKey(1);
+    }
+}
+
+void examine_intensity(Mat src) {
+    Mat masked_img, mask, gray, result;
+    int min = 0;
+    int max = 200;
+    cvtColor(src, gray, COLOR_BGR2GRAY);
+
+    namedWindow("Trackbars", (640, 200));
+    createTrackbar("Intensity min", "Trackbars", &min, 255);
+    createTrackbar("Intensity max", "Trackbars", &max, 255);
+
+    while (true) {
+        Scalar lower(min);
+        Scalar upper(max);
+
+        inRange(gray, lower, upper, mask);
+        apply_mask(gray, mask, masked_img);
+
+        imshow("Source image", gray);
         imshow("Image mask", mask);
         imshow("Masked image", masked_img);
 

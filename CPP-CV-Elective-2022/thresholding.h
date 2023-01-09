@@ -5,8 +5,6 @@
 
 using namespace cv;
 
-
-
 Mat CannyThreshold(Mat src)
 {
     Mat dst, detected_edges;
