@@ -71,3 +71,11 @@ Mat backgroundRemovalComplex(Mat src) {
 
 	return foregroundMask;
 }
+
+Mat DoG(Mat src) {
+	Mat g1, g2, dog;
+	GaussianBlur(src, g1, Size(3, 3), 0);
+	GaussianBlur(src, g2, Size(7, 7), 0);
+	dog = g1 - g2;
+	return dog;
+}

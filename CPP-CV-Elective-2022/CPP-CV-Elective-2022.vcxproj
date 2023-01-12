@@ -141,6 +141,7 @@
     <ClInclude Include="analysis.h" />
     <ClInclude Include="chains.h" />
     <ClInclude Include="ex1.h" />
+    <ClInclude Include="keypoint_matching.h" />
     <ClInclude Include="Header2.h" />
     <ClInclude Include="thresholding.h" />
   </ItemGroup>

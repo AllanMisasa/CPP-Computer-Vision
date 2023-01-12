@@ -13,26 +13,13 @@ Mat circle_detector(Mat src) {
 	vector<Vec3f> circles;		// Vector of 3 floating point integers	
 	HoughCircles(src, circles,  // circles: A vector that stores sets of 3 values: xc,yc,r for each detected circle.
 				 HOUGH_GRADIENT,// Detection method - HOUGH_GRADIENT is the only one as of OpenCV 4.6.0
-				 2,				// Inverse ratio of resolution 
-				 src.rows/32,   // Minimum distance in pixels between the circles
-				 155,			// Upper threshold for internal Canny edge detector
-				 10,			// Threshold for center detection
-				 00,				// Minimum radius to be detected. If unknown, set to zero.
-				 100			// Maximum radius to be detected. If unknown, set to zero.
-				);
-
-	/*
-	Params for pill use case
-		HoughCircles(src, circles,  // circles: A vector that stores sets of 3 values: xc,yc,r for each detected circle.
-				 HOUGH_GRADIENT,// Detection method - HOUGH_GRADIENT is the only one as of OpenCV 4.6.0
-				 1,				// Inverse ratio of resolution
+				 1,				// Inverse ratio of resolution 
 				 src.rows/16,   // Minimum distance in pixels between the circles
 				 100,			// Upper threshold for internal Canny edge detector
 				 30,			// Threshold for center detection
 				 1,				// Minimum radius to be detected. If unknown, set to zero.
 				 70				// Maximum radius to be detected. If unknown, set to zero.
 				);
-	*/
 
 	for (size_t i = 0; i < circles.size(); i++)
 	{
@@ -58,12 +45,12 @@ Mat Blob_detector(Mat src) {
 	params.minArea = 150;
 
 	params.filterByCircularity = true;
-	params.minCircularity = 0.1;
+	params.minCircularity = 0.7;
 
 	params.filterByConvexity = false;
 	params.minConvexity = 0.87;
 
-	params.filterByInertia = true;
+	params.filterByInertia = false;
 	params.minInertiaRatio = 0.7;
 
 	src = preprocessing(src);
@@ -72,6 +59,7 @@ Mat Blob_detector(Mat src) {
 	Ptr<SimpleBlobDetector> detector = SimpleBlobDetector::create(params);
 	vector<KeyPoint> keypoints;
 	detector->detect(src, keypoints);
+	cout << keypoints.size() << endl;
 	drawKeypoints(src, 
 					keypoints, 
 					image_with_keypoints, 
@@ -79,6 +67,7 @@ Mat Blob_detector(Mat src) {
 					DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
 	imshow("Keypoints", image_with_keypoints);
 	waitKey(0);
+
 	return image_with_keypoints;
 }
 
@@ -101,6 +90,9 @@ void getContourAreas(Mat dilated, Mat src) {
 	for (int i = 0; i < contours.size(); i++) {
 		int area = contourArea(contours[i]);
 		cout << area << endl;
+		if (area < 1000) {
+			contours[i];
+		}
 	}
 }
 
@@ -160,9 +152,9 @@ void matchContoursFull(Mat image, Mat temp) {
 		drawContours(imageresult2, contours2, i, color, 1, 8, hierarchy2, 0, Point());
 	}
 
-	for (int i = 0; i < contours1.size(); i++)
+	for (int i = 0; i < contours2.size(); i++)
 	{
-		ans = matchShapes(contours1[i], contours2[i], CONTOURS_MATCH_I1, 0);
+		ans = matchShapes(contours1[0], contours2[i], CONTOURS_MATCH_I1, 0);
 		cout << ans << " ";
 		getchar();
 	}
@@ -213,22 +205,6 @@ Mat contours_full(Mat src) {
 	imshow("Components", contoured);
 	waitKey(0);
 	return contoured;
-}
-
-Mat sift_keypoints(Mat image) {
-
-	// Create a SIFT detector object
-	Ptr<SIFT> detector = SIFT::create();
-
-	// Detect keypoints in the image
-	vector<KeyPoint> keypoints;
-	detector->detect(image, keypoints);
-
-	// Draw the keypoints on the image
-	Mat keypoint_image;
-	drawKeypoints(image,keypoints, keypoint_image, Scalar::all(-1), DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
-
-	return keypoint_image;
 }
 
 void simple_match(Mat image, Mat temp) {
