@@ -16,7 +16,7 @@ Mat sift_keypoints(Mat image) {
 	// Detect keypoints in the image
 	vector<KeyPoint> keypoints;
 	detector->detect(image, keypoints);
-
+	cout << "Number of SIFT keypoints, " << keypoints.size() << endl;
 	// Draw the keypoints on the image
 	Mat keypoint_image;
 	drawKeypoints(image, keypoints, keypoint_image, Scalar::all(-1), DrawMatchesFlags::DRAW_RICH_KEYPOINTS);

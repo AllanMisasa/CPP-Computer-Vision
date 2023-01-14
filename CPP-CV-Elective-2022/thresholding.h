@@ -18,7 +18,6 @@ Mat CannyThreshold(Mat src)
     Canny(detected_edges, detected_edges, lowThreshold, lowThreshold * ratio, kernel_size);
     dst = Scalar::all(0);
     src.copyTo(dst, detected_edges);
-    imshow(window_name, dst);
     return dst;
 }
 
@@ -28,7 +27,5 @@ Mat OtsuThreshold(Mat src) {
     int maxValue = 255;
     long double thres = threshold(src, dst, thresh, maxValue, THRESH_OTSU); // thres is the approximated threshold for Otsu
     cout << "Otsu threshold: " << thres << endl;                            // print approximated threshold
-    imshow("Thresholded image: ", dst);
-    waitKey(0);
     return dst;
 }

@@ -16,19 +16,25 @@ using namespace cv;
 using namespace std;
 
 int main(int argc, char** argv) {
-	utils::logging::setLogLevel(cv::utils::logging::LogLevel::LOG_LEVEL_SILENT);
-	Mat image = imread("C:/opencv_images/pills.jpg");
-	//image = resize_image(image, 640, 480);
-	Mat temp = imread("C:/opencv_images/pill.jpg");
-	//temp = resize_image(temp, 640, 480);
-	//dilated = preprocessing(image);
-	//getContourAreas(dilated, image);
-	//contours_full(image);
-	//imwrite("C:/portfolio_images/blurred_zebra2.jpg", blurred);
-	//CannyThreshold(image);
-	//video_edge_detection();
-	//matchContoursFull(image, temp);
-	//Blob_detector(image);
-	//circle_detector(image);
-	sift_matching(image, temp);
+	utils::logging::setLogLevel(utils::logging::LogLevel::LOG_LEVEL_SILENT);
+
+	RNG rng(12345);
+	vector<vector<Point>> contours;
+	vector<Vec4i> hierarchy;
+	Mat image = imread("C:/opencv_images/three_zebra.jpg", IMREAD_GRAYSCALE);
+	Mat temp = imread("C:/opencv_images/pills.jpg");
+	Mat drawing = Mat::zeros(edges.size(), CV_8UC3);
+
+	//sift_keypoints(image);
+	
+	//Mat dog = DoG(image);
+	//dog = OtsuThreshold(dog);
+	//GaussianBlur(dog, dog, Size(11, 11), 2);
+	//dog = contours_simple(dog);
+	//imshow("Contours", dog);
+	//i_am_blrrr(image);
+	Mat dog = DoG(image);
+	dog = contours_simple(dog);
+	imshow("DoG", dog);
+	waitKey(0);
 }

@@ -7,7 +7,21 @@
 using namespace cv;
 using namespace std;
 
+void i_am_blrrr(Mat src) {
+    Mat block, gaussian, median, bilateral;
+    int i = 11;
 
+    blur(src, block, Size(i, i), Point(-1, -1));
+    GaussianBlur(src, gaussian, Size(i, i), 0, 0);
+    medianBlur(src, median, i);
+    bilateralFilter(src, bilateral, i, i * 2, i / 2);
+
+    imshow("Block-filter", block);
+    imshow("Gaussian blur", gaussian);
+    imshow("Median blur", median);
+    imshow("Bilateral", bilateral);
+    waitKey(0);
+}
 
 int get_dimensions(Mat src) {
     int width = src.cols;

@@ -141,3 +141,14 @@ void video_player() {
     cap.release();
     destroyAllWindows();
 }
+
+Mat blend_images(Mat img1, Mat img2) {
+    Mat blended;
+    double alpha = 0.5;  
+    double beta = (1.0 - alpha);
+
+    addWeighted(img1, alpha, img2, beta, 0.0, blended);
+
+    return blended;
+
+}

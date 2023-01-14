@@ -42,10 +42,10 @@ Mat Blob_detector(Mat src) {
 	params.maxThreshold = 200;
 
 	params.filterByArea = true;
-	params.minArea = 150;
+	params.minArea = 150;			// Filter out any blob object below 150 px in area
 
 	params.filterByCircularity = true;
-	params.minCircularity = 0.7;
+	params.minCircularity = 0.7;	// Filter out any blob that is less circular in %
 
 	params.filterByConvexity = false;
 	params.minConvexity = 0.87;
@@ -53,7 +53,7 @@ Mat Blob_detector(Mat src) {
 	params.filterByInertia = false;
 	params.minInertiaRatio = 0.7;
 
-	src = preprocessing(src);
+	src = preprocessing(src);		
 
 	Mat image_with_keypoints;
 	Ptr<SimpleBlobDetector> detector = SimpleBlobDetector::create(params);
@@ -74,10 +74,11 @@ Mat Blob_detector(Mat src) {
 /*
 getContours() takes as input first the binary image that needs contour approximation
 The second input is the original image, so we can overpaint the contours.
-The for loop shows the areas of the contours in th
+The for loop shows the areas of the detected contours
 */
 void getContourAreas(Mat dilated, Mat src) {
 	vector<vector<Point>> contours;
+	vector<vector<Point>> contours_filtered;
 	vector<Vec4i> hierarchy;
 	 
 	findContours(dilated,
@@ -85,15 +86,16 @@ void getContourAreas(Mat dilated, Mat src) {
 		hierarchy,
 		RETR_EXTERNAL,
 		CHAIN_APPROX_SIMPLE);
-	drawContours(src, contours, -1, Scalar(255, 0, 255), 2);
 
 	for (int i = 0; i < contours.size(); i++) {
 		int area = contourArea(contours[i]);
-		cout << area << endl;
-		if (area < 1000) {
-			contours[i];
+		if (area > 12000) {
+			contours_filtered.push_back(contours[i]);
 		}
+		cout << area << endl;
+		cout << "Found" << contours_filtered.size() << "zebras" << endl;
 	}
+	drawContours(src, contours_filtered, -1, Scalar(255, 0, 255), 2);
 }
 
 vector<vector<Point>> extractContours(Mat dilated, Mat src) {
@@ -160,19 +162,14 @@ void matchContoursFull(Mat image, Mat temp) {
 	}
 }
 
-
 Mat contours_simple(Mat img) {
-	Mat imgGray, imgBlur, edges, dilated;
+	Mat imgBlur, edges, dilated;
 	Mat kernel = getStructuringElement(MORPH_RECT, Size(3, 3));
-	cvtColor(img, imgGray, COLOR_BGR2GRAY);
-	GaussianBlur(imgGray, imgBlur, Size(3, 3), 3, 0);
+	GaussianBlur(img, imgBlur, Size(3, 3), 3, 0);
 	Canny(imgBlur, edges, 25, 75);
 	dilate(edges, dilated, kernel);
 
 	getContourAreas(dilated, img);
-
-	imshow("Contoured image", img);
-	waitKey(0);
 	return img;
 }
 
