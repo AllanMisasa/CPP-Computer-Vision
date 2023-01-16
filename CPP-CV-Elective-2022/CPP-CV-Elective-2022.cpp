@@ -33,8 +33,7 @@ int main(int argc, char** argv) {
 	//dog = contours_simple(dog);
 	//imshow("Contours", dog);
 	//i_am_blrrr(image);
-	Mat dog = DoG(image);
-	dog = contours_simple(dog);
-	imshow("DoG", dog);
-	waitKey(0);
+	//Mat dog = DoG(image);
+	//contours_simple(dog);
+	video_edge_detection();
 }

@@ -66,31 +66,34 @@ void video_edge_detection() {
         cout << "Error opening video stream or file" << endl;
     }
 
-    int frame_width = cap.get(CAP_PROP_FRAME_WIDTH);
-    int frame_height = cap.get(CAP_PROP_FRAME_HEIGHT);
+    //int frame_width = cap.get(CAP_PROP_FRAME_WIDTH);
+    //int frame_height = cap.get(CAP_PROP_FRAME_HEIGHT);
 
-    VideoWriter video("C:/portfolio_images/outcpp.avi", VideoWriter::fourcc('M', 'J', 'P', 'G'), 24, Size(frame_width, frame_height));
-
-
-    while (1) {
-        Mat frame, hsv, mask, res;
+    //VideoWriter video("C:/portfolio_images/outcpp.avi", VideoWriter::fourcc('M', 'J', 'P', 'G'), 24, Size(frame_width, frame_height));
+    int counter = 0;
+    while (true) {
+        Mat frame, processed, contoured, res;
         cap.read(frame);               // Capture frame-by-frame
+        counter++;
         if (frame.empty()) {           // Break if no frame
             break;
         }
+        if (counter % 24 == 0) {
+            processed = preprocessing(frame);
+            contoured = extractContours(processed);
+            //video.write(frame);
+            imshow("Frame", contoured);        // Display frame
 
-
-        frame = contours_full(frame);
-        video.write(frame);
-        //imshow("Frame", frame);        // Display frame
-
-        char c = (char)waitKey(25);
+        }
+        char c = (char)waitKey(1);
         if (c == 27) {                 // Break if user press escape
             break;
-        }
+
+        }    //imwrite("C:/opencv_images/snapshot.jpg", frame);
     }
+
     cap.release();
-    video.release();
+    //video.release();
     destroyAllWindows();
 }
 
@@ -135,6 +138,7 @@ void video_player() {
 
         char c = (char)waitKey(25);
         if (c == 27) {            // Break if user press escape
+            imwrite("C:/opencv_images/Someframe.jpg", frame);
             break;
         }
     }

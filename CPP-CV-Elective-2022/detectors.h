@@ -96,9 +96,11 @@ void getContourAreas(Mat dilated, Mat src) {
 		cout << "Found" << contours_filtered.size() << "zebras" << endl;
 	}
 	drawContours(src, contours_filtered, -1, Scalar(255, 0, 255), 2);
+	imshow("Contours", src);
+	waitKey(0);
 }
 
-vector<vector<Point>> extractContours(Mat dilated, Mat src) {
+Mat extractContours(Mat dilated) {
 
 	vector<vector<Point>> contours;
 	vector<Vec4i> hierarchy;
@@ -108,7 +110,8 @@ vector<vector<Point>> extractContours(Mat dilated, Mat src) {
 		hierarchy,
 		RETR_EXTERNAL,
 		CHAIN_APPROX_SIMPLE);
-	return contours;
+	drawContours(dilated, contours, -1, Scalar(255, 0, 255), 2);
+	return dilated;
 }
 
 void matchContoursSimple(vector<vector<Point>> contour_template, vector<vector<Point>> array_of_contours) {
@@ -170,6 +173,7 @@ Mat contours_simple(Mat img) {
 	dilate(edges, dilated, kernel);
 
 	getContourAreas(dilated, img);
+
 	return img;
 }
 
