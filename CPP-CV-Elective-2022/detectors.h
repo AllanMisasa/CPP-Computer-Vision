@@ -100,6 +100,56 @@ void getContourAreas(Mat dilated, Mat src) {
 	waitKey(0);
 }
 
+void contoursBounded(Mat src) {
+	Mat imgBlur, edges, dilated;
+	Mat kernel = getStructuringElement(MORPH_RECT, Size(3, 3));
+	GaussianBlur(src, imgBlur, Size(3, 3), 3, 0);
+	Canny(imgBlur, edges, 25, 75);
+	dilate(edges, dilated, kernel);
+
+	vector<vector<Point>> contours;
+	vector<vector<Point>> contours_filtered;
+	vector<Vec4i> hierarchy;
+
+	findContours(dilated,
+		contours,
+		hierarchy,
+		RETR_EXTERNAL,
+		CHAIN_APPROX_SIMPLE);
+
+	for (int i = 0; i < contours.size(); i++) {
+		int area = contourArea(contours[i]);
+		if (area > 12000) {
+			contours_filtered.push_back(contours[i]);
+		}
+		cout << area << endl;
+		cout << "Found" << contours_filtered.size() << "zebras" << endl;
+	}
+
+	vector<Rect> boundRect(contours_filtered.size());
+	vector<Point2f>centers(contours_filtered.size());
+	vector<float>radius(contours_filtered.size());
+
+	vector<vector<Point>> contours_poly(contours_filtered.size());
+	for (size_t i = 0; i < contours_filtered.size(); i++)
+	{
+		approxPolyDP(contours_filtered[i], contours_poly[i], 3, true);
+		boundRect[i] = boundingRect(contours_poly[i]);
+		minEnclosingCircle(contours_poly[i], centers[i], radius[i]);
+	}
+	Mat drawing = Mat::zeros(src.size(), CV_8UC3);
+	RNG rng(12345);
+	for (size_t i = 0; i < contours_filtered.size(); i++)
+	{
+		Scalar color = Scalar(rng.uniform(0, 256), rng.uniform(0, 256), rng.uniform(0, 256));
+		drawContours(drawing, contours_poly, (int)i, color);
+		rectangle(drawing, boundRect[i].tl(), boundRect[i].br(), color, 2);
+		circle(drawing, centers[i], (int)radius[i], color, 2);
+	}
+	imshow("Contours", drawing);
+	waitKey(0);
+}
+
 Mat extractContours(Mat dilated) {
 
 	vector<vector<Point>> contours;

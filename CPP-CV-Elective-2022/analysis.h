@@ -16,6 +16,12 @@ void i_am_blrrr(Mat src) {
     medianBlur(src, median, i);
     bilateralFilter(src, bilateral, i, i * 2, i / 2);
 
+    block = preprocessing(block);
+    block = extractContours(block);
+
+    gaussian = preprocessing(gaussian);
+    gaussian = extractContours(gaussian);
+
     imshow("Block-filter", block);
     imshow("Gaussian blur", gaussian);
     imshow("Median blur", median);

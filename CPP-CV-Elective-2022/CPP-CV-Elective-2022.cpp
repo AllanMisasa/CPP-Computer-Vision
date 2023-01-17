@@ -18,22 +18,13 @@ using namespace std;
 int main(int argc, char** argv) {
 	utils::logging::setLogLevel(utils::logging::LogLevel::LOG_LEVEL_SILENT);
 
-	RNG rng(12345);
-	vector<vector<Point>> contours;
-	vector<Vec4i> hierarchy;
 	Mat image = imread("C:/opencv_images/three_zebra.jpg", IMREAD_GRAYSCALE);
 	Mat temp = imread("C:/opencv_images/pills.jpg");
-	Mat drawing = Mat::zeros(edges.size(), CV_8UC3);
 
 	//sift_keypoints(image);
-	
+
+	i_am_blrrr(image);
 	//Mat dog = DoG(image);
-	//dog = OtsuThreshold(dog);
-	//GaussianBlur(dog, dog, Size(11, 11), 2);
-	//dog = contours_simple(dog);
-	//imshow("Contours", dog);
-	//i_am_blrrr(image);
-	//Mat dog = DoG(image);
-	//contours_simple(dog);
-	video_edge_detection();
+	//contoursBounded(dog);
+	//video_background_replace();
 }
