@@ -1,11 +1,13 @@
-#include "opencv2/imgproc.hpp"
-#include "opencv2/imgcodecs.hpp"
-#include "opencv2/highgui.hpp"
+#include <opencv2/core.hpp>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/imgcodecs.hpp>
+#include <opencv2/highgui.hpp>
+#include "CPP-CV-Elective-2022/analysis.h"
 
 #include <iostream>
 
-using namespace cv; // OpenCV namespace
 using namespace std; // Standard C++ namespace
+using namespace cv; // OpenCV namespace
 
 int main() {
 	// Set path to image
@@ -59,7 +61,8 @@ int main() {
 	}
 	
 	// Display the histograms
-	imshow("Histogram", histImage);
-	waitKey(0);
-	return 0;
+	//imshow("Histogram", histImage);
+	//waitKey(0);
+	//return 0;
+	Histogram_color(img);
 }

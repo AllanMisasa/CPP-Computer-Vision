@@ -2,6 +2,8 @@
 #include "opencv2/imgcodecs.hpp"
 #include "opencv2/highgui.hpp"
 #include "opencv2/imgproc.hpp"
+#include "chains.h"
+#include "detectors.h"
 #include <iostream>
 
 using namespace cv;

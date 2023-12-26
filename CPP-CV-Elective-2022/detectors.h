@@ -277,7 +277,6 @@ void simple_match(Mat image, Mat temp) {
 
 int match(Mat ref, Mat tpl)
 {
-
 	Mat gref, gtpl;
 	cvtColor(ref, gref, COLOR_BGR2GRAY);									 // Convert input image to grayscale
 	cvtColor(tpl, gtpl, COLOR_BGR2GRAY);									 // Convert template image to grayscale
