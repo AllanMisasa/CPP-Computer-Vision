@@ -17,19 +17,6 @@ Mat resize_image(Mat src, int width, int height)
 
 Mat temp, src, src_gray, imgGray, imgBlur, dst, edges, dilated, eroded; // Define image types
 
-void images() {
-    // CommandLineParser parser(argc, argv, "{@input | fruits.jpg | input image}");
-    // string image_path = samples::findFile("starry_night.jpg");
-
-    src = imread("C:/opencv_images/pills.jpg", IMREAD_GRAYSCALE);   // Load source image as color
-    if (src.empty())                                                // Exception handling if file is not found
-    {
-        std::cout << "Could not open or find the image!\n" << std::endl;
-    }
-
-    temp = imread("C:/opencv_images/pill.jpg");
-}
-
 void video_background_replace() {
 
     src = imread("C:/opencv_images/stars_bg.jpg", IMREAD_COLOR);
