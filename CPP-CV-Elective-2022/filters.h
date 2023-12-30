@@ -94,6 +94,15 @@ void HSV_track_bars(Mat img) {
 	}
 }
 
+Mat HSV_filter(Mat src, int low_H, int low_S, int low_V, int high_H, int high_S, int high_V) {
+	Mat img_HSV, frame_threshold;	// Create Mat objects for HSV image and thresholded image
+
+	cvtColor(src, img_HSV, COLOR_BGR2HSV);
+	inRange(img_HSV, Scalar(low_H, low_S, low_V), Scalar(high_H, high_S, high_V), frame_threshold);
+
+	return frame_threshold;
+}
+
 /*
 void getContours(Mat dilated, Mat src) {
 	vector<vector<Point>> contours;
