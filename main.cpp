@@ -24,6 +24,12 @@ int main() {
 		std::cout << "Image cannot be loaded" << std::endl;
 		return -1; // Return error
 	}
-
-	HSV_track_bars(img);	
+Mat hsvImage; // Create a new empty image
+cvtColor(img, hsvImage, COLOR_BGR2HSV); // Convert to HSV
+Mat mask; // Create a new empty image
+inRange(hsvImage, Scalar(0, 100, 100), Scalar(150, 255, 255), mask); // Apply threshold - first scalar is lower bound, second scalar is upper bound
+Mat result; // Create a new empty image
+bitwise_and(img, img, result, mask); // Apply mask
+imshow("Lena", result); // Show the image
+waitKey(0); // Wait for keypress
 }
