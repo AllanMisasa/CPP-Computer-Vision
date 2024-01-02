@@ -137,5 +137,4 @@ Mat blend_images(Mat img1, Mat img2) {
     addWeighted(img1, alpha, img2, beta, 0.0, blended);
 
     return blended;
-
 }

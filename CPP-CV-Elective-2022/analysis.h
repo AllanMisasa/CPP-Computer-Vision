@@ -39,7 +39,7 @@ int get_dimensions(Mat src) {
     return width, height;
 }
 
-static void* Histogram_gray(Mat src) {
+Mat histogram_gray(Mat src) {
 	int histSize = 256;
 	float range[] = { 0, 256 };
 	const float* histRange[] = { range };
@@ -58,13 +58,10 @@ static void* Histogram_gray(Mat src) {
 			Point(bin_w * (i), hist_h - cvRound(hist.at<float>(i))),
 			Scalar(255, 0, 0), 2, 8, 0);
 	}
-	imshow("Source image", src);
-	imshow("calcHist Demo", histImage);
-	waitKey();
-	return EXIT_SUCCESS;
+	return histImage;
 }
 
-static void* Histogram_color(Mat src) {
+Mat histogram_color(Mat src) {
     vector<Mat> bgr_planes;
 
     split(src, bgr_planes);
@@ -99,11 +96,7 @@ static void* Histogram_color(Mat src) {
             Point(bin_w * (i), hist_h - cvRound(r_hist.at<float>(i))),
             Scalar(0, 0, 255), 2, 8, 0);
     }
-
-    imshow("Source image", src);
-    imshow("calcHist Demo", histImage);
-    waitKey();
-    return EXIT_SUCCESS;
+    return histImage;
 }
 
 Mat apply_mask(Mat& src, Mat& mask, Mat& result) {

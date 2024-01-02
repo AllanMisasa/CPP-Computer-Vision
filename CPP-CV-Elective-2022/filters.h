@@ -57,7 +57,7 @@ Mat RemoveColor(Mat src, int color)
 			BGRChannels[1] = Mat::zeros(src.rows, src.cols, CV_8UC1);// removing Green channel
 			merge(BGRChannels, src); // pack the image
 		case 2:
-			BGRChannels[1] = Mat::zeros(src.rows, src.cols, CV_8UC1);// removing Green channel
+			BGRChannels[2] = Mat::zeros(src.rows, src.cols, CV_8UC1);// removing Red channel
 			merge(BGRChannels, src); // pack the image
 	}
 	imshow("Stripped image", src);
@@ -113,6 +113,23 @@ void getContours(Mat dilated, Mat src) {
 }
 */
 
+Mat gabor_filter(Mat src) {
+	Mat out, dest, src_float;
+	src.convertTo(src_float, CV_32F);
+	Mat kernel = getGaborKernel(Size(35, 35), 3, 1, 10, 0.5, 0, CV_32F);  // kernel size, sigma, theta, lambda, gamma, psi, ktype
+	filter2D(src_float, dest, CV_32F, kernel);
+	dest.convertTo(out, CV_8U, 1.0/255.0); 								// move to proper[0-255] range to show it
+	return out;
+}
+
+Mat DoG(Mat src) {
+	Mat g1, g2, dog;
+	GaussianBlur(src, g1, Size(1, 1), 0);
+	GaussianBlur(src, g2, Size(5, 5), 0);
+	subtract(g1, g2, dog);
+	return dog;
+}
+
 Mat backgroundRemovalSimple(Mat frame, Mat src) {
 	Mat hsv, mask, res;
 	cvtColor(frame, hsv, COLOR_BGR2HSV);
@@ -148,10 +165,3 @@ Mat backgroundRemovalComplex(Mat src) {
 	return foregroundMask;
 }
 
-Mat DoG(Mat src) {
-	Mat g1, g2, dog;
-	GaussianBlur(src, g1, Size(1, 1), 0);
-	GaussianBlur(src, g2, Size(5, 5), 0);
-	subtract(g1, g2, dog);
-	return dog;
-}

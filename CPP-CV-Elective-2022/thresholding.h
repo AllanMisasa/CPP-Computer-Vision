@@ -29,3 +29,11 @@ Mat OtsuThreshold(Mat src) {
     cout << "Otsu threshold: " << thres << endl;                            // print approximated threshold
     return dst;
 }
+
+Mat binary_threshold(Mat src) {
+    Mat dst;
+    int thresh = 0;
+    int maxValue = 255;
+    threshold(src, dst, thresh, maxValue, THRESH_BINARY);
+    return dst;
+}
