@@ -11,36 +11,56 @@
 using namespace std; 													// Standard C++ namespace
 using namespace cv; 													// OpenCV namespace
 
-string path = "images/"; 		
+vector<Mat> bgr_planes;
+int histSize = 256;
+float range[] = { 0, 256 }; //the upper boundary is exclusive
+const float* histRange[] = { range };
+Mat b_hist, g_hist, r_hist;
+int hist_w = 512, hist_h = 400;
+int bin_w = cvRound( (double) hist_w/histSize );
 
-int low = 0;
-int high = 255;
-const String window = "Binary thresholds";
+string path = "images/"; 	
+string image_path; 												// Path to image	
 
-static void onTrackbar(int, void *) {
-	low_H = min(high-1, low);
-	setTrackbarPos("Low", window, low_H);
-}
+Mat img;
 
 int main() {
-	std::string image_path = samples::findFile("starry_night.jpg");  	// Set path to image
-	string italy = path + "italy.jpg";									// Set path to image
-	Mat threshold;
-	Mat img1 = imread(italy, 0);  										// Read image into Mat object
-	Mat img2 = imread(image_path, 0);  									// Read image into Mat object
+	image_path = path + "italy.jpg"; 										// Path to image
+	img = imread(image_path, IMREAD_COLOR); 									// Read the file
+	if (img.empty()) { 													// Check for invalid input
+		cout << "Could not open or find the image" << endl;
+		return 0;
+	}
 
-	namedWindow(window, WINDOW_AUTOSIZE); 								// Create a window
-	createTrackbar("Low", window, &low , 255, onTrackbar); // Create a trackbar
+	split(img, bgr_planes );
 
-	while (true) {	
-		inRange(img1, low_H, high_H, threshold);
-		imshow("Lena", threshold); 										// Show the image
-		char key = (char) waitKey(30);
-		if (key == 'q' || key == 27)
-		{
-			break;
-		}			
-	}								
+	bool uniform = true, accumulate = false;
+	
+	calcHist( &bgr_planes[0], 1, 0, Mat(), b_hist, 1, &histSize, histRange, uniform, accumulate );
+    calcHist( &bgr_planes[1], 1, 0, Mat(), g_hist, 1, &histSize, histRange, uniform, accumulate );
+    calcHist( &bgr_planes[2], 1, 0, Mat(), r_hist, 1, &histSize, histRange, uniform, accumulate );
+
+	Mat histImage( hist_h, hist_w, CV_8UC3, Scalar( 0,0,0) );
+    normalize(b_hist, b_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat() );
+    normalize(g_hist, g_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat() );
+    normalize(r_hist, r_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat() );
+
+	for( int i = 1; i < histSize; i++ )
+    {
+        line( histImage, Point( bin_w*(i-1), hist_h - cvRound(b_hist.at<float>(i-1)) ),
+              Point( bin_w*(i), hist_h - cvRound(b_hist.at<float>(i)) ),
+              Scalar( 255, 0, 0), 2, 8, 0  );
+        line( histImage, Point( bin_w*(i-1), hist_h - cvRound(g_hist.at<float>(i-1)) ),
+              Point( bin_w*(i), hist_h - cvRound(g_hist.at<float>(i)) ),
+              Scalar( 0, 255, 0), 2, 8, 0  );
+        line( histImage, Point( bin_w*(i-1), hist_h - cvRound(r_hist.at<float>(i-1)) ),
+              Point( bin_w*(i), hist_h - cvRound(r_hist.at<float>(i)) ),
+              Scalar( 0, 0, 255), 2, 8, 0  );
+    }
+
+	imshow("Original", histImage); 												// Show our image inside it.
+	waitKey(0); 			
+	return 0;				
 }
 
 /*
