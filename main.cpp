@@ -20,10 +20,30 @@ int hist_w = 512, hist_h = 400;
 int bin_w = cvRound( (double) hist_w/histSize );
 
 string path = "images/"; 	
-string image_path; 												// Path to image	
+string image_path, image_path2; 												// Path to image	
 
-Mat img;
+Mat img, pcb, out, hist, hist2; 
 
+int main() {
+	image_path = path + "italy.jpg"; 										// Path to image
+    image_path2 = path + "pcb.jpg";
+	img = imread(image_path, IMREAD_GRAYSCALE); 									// Read the file
+    pcb = imread(image_path2, IMREAD_GRAYSCALE);
+
+    equalizeHist( pcb, out );
+    hist = histogram_gray(pcb);
+    hist2 = histogram_gray(out);
+    imshow( "Source image", pcb );
+    imshow( "Equalized Image", out );
+    imshow( "Histogram", hist );
+    imshow( "Equalized Histogram", hist2 );
+    
+    waitKey();
+    return 0;
+}
+
+
+/*
 int main() {
 	image_path = path + "italy.jpg"; 										// Path to image
 	img = imread(image_path, IMREAD_COLOR); 									// Read the file
@@ -62,6 +82,7 @@ int main() {
 	waitKey(0); 			
 	return 0;				
 }
+*/
 
 /*
 Mat img_HSV, frame_threshold;											// Create Mat objects for HSV image and thresholded image
