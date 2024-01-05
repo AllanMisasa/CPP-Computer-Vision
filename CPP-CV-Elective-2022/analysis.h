@@ -44,7 +44,7 @@ Mat histogram_gray(Mat src) {
 	float range[] = { 0, 256 };
 	const float* histRange[] = { range };
 	bool uniform = true, accumulate = false;
-	int hist_w = 512, hist_h = 400;
+	int hist_w = 1024, hist_h = 800;
 	int bin_w = cvRound((double)hist_w / histSize);
 	Mat histImage(hist_h, hist_w, CV_8UC3, Scalar(0, 0, 0));
 
@@ -76,7 +76,7 @@ Mat histogram_color(Mat src) {
     calcHist(&bgr_planes[1], 1, 0, Mat(), g_hist, 1, &histSize, histRange, uniform, accumulate);
     calcHist(&bgr_planes[2], 1, 0, Mat(), r_hist, 1, &histSize, histRange, uniform, accumulate);
 
-    int hist_w = 512, hist_h = 400;
+    int hist_w = 1024, hist_h = 800;
     int bin_w = cvRound((double)hist_w / histSize);
     Mat histImage(hist_h, hist_w, CV_8UC3, Scalar(0, 0, 0));
 

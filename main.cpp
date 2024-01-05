@@ -20,23 +20,45 @@ int hist_w = 512, hist_h = 400;
 int bin_w = cvRound( (double) hist_w/histSize );
 
 string path = "images/"; 	
-string image_path, image_path2; 												// Path to image	
+string image_path, image_path2, image_path3; 												// Path to image
 
-Mat img, pcb, out, hist, hist2; 
+//const int max_value_H = 360/2;
+//const int max_value = 255;
+//int low_H = 0, low_S = 0, low_V = 0;
+//int high_H = max_value_H, high_S = max_value, high_V = max_value;
+
+Mat img, pcb, out, hist, hist2, hist3, opencv, thresholded, hsv; 
 
 int main() {
 	image_path = path + "italy.jpg"; 										// Path to image
     image_path2 = path + "pcb.jpg";
+    image_path3 = path + "opencv.jpg";
 	img = imread(image_path, IMREAD_GRAYSCALE); 									// Read the file
     pcb = imread(image_path2, IMREAD_GRAYSCALE);
+    opencv = imread(image_path3, IMREAD_COLOR);
+    inRange(opencv, Scalar(int 0, low_S, low_V), Scalar(int 57, high_S, high_V), thresholded);
+    
+    // change opencv color to hs
+    
+    //cvtColor(opencv, opencv, COLOR_BGR2HSV);
 
-    equalizeHist( pcb, out );
-    hist = histogram_gray(pcb);
+    //split(opencv, bgr_planes);
+
+    examine_colors(opencv);
+    equalizeHist( opencv, out );
+    GaussianBlur(src, g2, Size(5, 5), 0);
+    hist = histogram_gray(bgr_planes[0]);
     hist2 = histogram_gray(out);
-    imshow( "Source image", pcb );
-    imshow( "Equalized Image", out );
-    imshow( "Histogram", hist );
-    imshow( "Equalized Histogram", hist2 );
+    hist3 = histogram_color(opencv);
+   // imshow("Original", opencv);
+    //imshow("Equalized", out);
+    //imshow( "Source image", pcb );
+   // imshow( "Equalized Image", out );
+   // imshow( "Histogram", hist );
+    //imshow( "Equalized Histogram", hist2 );
+    //imshow( "OpenCV Histogram", hist3);
+   // imshow( "OpenCV Image", opencv);
+    //imshow( "Thresholded Image", thresholded);
     
     waitKey();
     return 0;
