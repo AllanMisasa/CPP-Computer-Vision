@@ -113,6 +113,12 @@ void getContours(Mat dilated, Mat src) {
 }
 */
 
+Mat edge_filter(Mat src) {
+	float sigma_s = 60, sigma_r = 0.4;
+	edgePreservingFilter(src, src, 1, sigma_s, sigma_r);
+	return src;
+}
+
 Mat gabor_filter(Mat src) {
 	Mat out, dest, src_float;
 	src.convertTo(src_float, CV_32F);
@@ -141,7 +147,6 @@ Mat backgroundRemovalSimple(Mat frame, Mat src) {
 	bitwise_or(frame, src, res);
 	return res;
 }
-
 
 Mat backgroundRemovalComplex(Mat src) {
 	Mat foregroundMask, foregroundImg, backgroundImg;

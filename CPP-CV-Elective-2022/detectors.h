@@ -23,10 +23,10 @@ Mat circle_detector(Mat src) {
 
 	for (size_t i = 0; i < circles.size(); i++)
 	{
-		Vec3i c = circles[i];	// Convert circles vector to hold integers.
-		Point center = Point(c[0], c[1]); // Define center points as Point object
+		Vec3i c = circles[i];				// Convert circles vector to hold integers.
+		Point center = Point(c[0], c[1]); 	// Define center points as Point object
 		circle(src, center, 5, Scalar(128, 0, 128), 3, LINE_AA); // Define center dot size and color.
-		int radius = c[2]; // Find radius of enclosing circles
+		int radius = c[2]; 										// Find radius of enclosing circlesk.
 		//circle(src, center, radius, Scalar(255, 0, 255), 3, LINE_AA); // Draw gray circles around detected circles
 	}
 	imshow("Detected circles", src);
@@ -352,8 +352,7 @@ void corner_detection(Mat src) {
 	waitKey(0);
 }
 
-void alt_corner(Mat src)
-{
+void alt_corner(Mat src) {
 	RNG rng(12345);
 	int maxCorners = MAX(400, 1);
 	vector<Point2f> corners;
