@@ -6,7 +6,8 @@
 #include "CPP-CV-Elective-2022/analysis.h"
 #include "CPP-CV-Elective-2022/filters.h"
 #include "CPP-CV-Elective-2022/thresholding.h"
-#include "CPP-CV-Elective-2022/pipeline.h"
+#include "CPP-CV-Elective-2022/pipelines.h"
+#include "CPP-CV-Elective-2022/cv_basic.h"
 
 #include <iostream>
 
@@ -39,5 +40,6 @@ int main() {
 	img = imread(image_path, IMREAD_COLOR); 									// Read the file
     pcb = imread(image_path2, IMREAD_COLOR);
     opencv = imread(image_path3, IMREAD_COLOR);   
-    edge(img);
+    
+    video_player();
 }

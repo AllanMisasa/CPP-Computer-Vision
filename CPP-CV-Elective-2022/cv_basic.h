@@ -69,10 +69,6 @@ void video_edge_detection() {
             contoured = extractContours(processed);
             video.write(frame);
         }
-
-      // Display frame
-
-        //imwrite("C:/opencv_images/snapshot.jpg", frame);
     }
 
     cap.release();
@@ -104,7 +100,7 @@ void draw_line(Mat src) {
 }
 
 void video_player() {
-    VideoCapture cap("C:/portfolio_images/outcpp.avi");
+    VideoCapture cap(0); // Use webcam as input
 
     if (!cap.isOpened()) {
         cout << "Error opening video stream or file" << endl;
@@ -117,11 +113,10 @@ void video_player() {
             break;
         }
 
-        imshow("Frame", res);     // Display frame
+        imshow("Frame", frame);     // Display frame
 
         char c = (char)waitKey(25);
         if (c == 27) {            // Break if user press escape
-            imwrite("C:/opencv_images/Someframe.jpg", frame);
             break;
         }
     }

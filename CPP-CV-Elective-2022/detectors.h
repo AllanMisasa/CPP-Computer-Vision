@@ -3,7 +3,7 @@
 #include "opencv2/highgui.hpp"
 #include <opencv2/features2d.hpp>
 #include <iostream>
-#include "chains.h"
+#include "pipelines.h"
 
 using namespace cv;
 using namespace std;
