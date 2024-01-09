@@ -8,14 +8,14 @@
 using namespace cv;
 using namespace std;
 
+Mat temp, src, src_gray, imgGray, imgBlur, dst, edges, dilated, eroded;
+
 Mat resize_image(Mat src, int width, int height)
 {
 	Mat resized_down;
 	resize(src, resized_down, Size(width, height), INTER_LINEAR);
 	return resized_down;
 }
-
-Mat temp, src, src_gray, imgGray, imgBlur, dst, edges, dilated, eroded; // Define image types
 
 void video_background_replace() {
 

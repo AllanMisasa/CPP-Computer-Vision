@@ -8,7 +8,7 @@ Mat preprocessing(Mat img) {
 
     Mat imgGray, imgBlur, edges, dilated, eroded;
 
-    //cvtColor(img, imgGray, COLOR_BGR2GRAY);
+    cvtColor(img, imgGray, COLOR_BGR2GRAY);
     GaussianBlur(img, imgBlur, Size(3, 3), 3, 0);
     Canny(imgBlur, edges, 25, 150);
 

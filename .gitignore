@@ -361,3 +361,14 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+CPP-CV-Elective-2022/CPP-CV-Elective-2022.cpp
+CPP-CV-Elective-2022/CPP-CV-Elective-2022.sln
+*.vcxproj
+*.sln
+Sobel.cpp
+Filters.cpp
+CPP-CV-Elective-2022/Basics.cpp
+Filters.cpp
+TestSetup.cpp
+TestSetup.sln
+*.sln
