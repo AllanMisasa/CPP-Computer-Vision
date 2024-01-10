@@ -51,6 +51,6 @@ int main() {
     //getContourAreas(proc, pcb2);
 
     contour_template = extractContours(pcb);
-    contour_test = extractContours(gogh);
+    contour_test = extractContours(img);
     matchContoursSimple(contour_template, contour_test);
 }
