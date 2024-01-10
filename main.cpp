@@ -30,7 +30,7 @@ string image_path, image_path1, image_path2, image_path3; 												// Path to
 //int low_H = 0, low_S = 0, low_V = 0;
 //int high_H = max_value_H, high_S = max_value, high_V = max_value;
 
-Mat img, pcb, pcb2, out, opencv, thresholded, hsv, proc, proc2; 
+Mat img, pcb, pcb2, out, opencv, thresholded, hsv, proc, proc2, gogh; 
 Mat sobelx, sobely, sobelxy;
 vector<vector<Point>> contour_test;
 vector<vector<Point>> contour_template;
@@ -43,7 +43,7 @@ int main() {
     image_path3 = path + "pcb2.jpg";
 	img = imread(image_path, IMREAD_COLOR); 									// Read the file
     pcb = imread(image_path1, IMREAD_COLOR);
-    opencv = imread(image_path2, IMREAD_COLOR);   
+    gogh = imread(image_path2, IMREAD_COLOR);   
     pcb2 = imread(image_path3, IMREAD_COLOR); 									// Read the file
     
     proc = preprocessing(pcb);
@@ -51,6 +51,6 @@ int main() {
     //getContourAreas(proc, pcb2);
 
     contour_template = extractContours(pcb);
-    contour_test = extractContours(pcb2);
+    contour_test = extractContours(gogh);
     matchContoursSimple(contour_template, contour_test);
 }
