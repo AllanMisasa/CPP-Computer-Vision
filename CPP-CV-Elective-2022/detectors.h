@@ -123,7 +123,7 @@ void contoursBounded(Mat src) {
 			contours_filtered.push_back(contours[i]);
 		}
 		cout << area << endl;
-		cout << "Found" << contours_filtered.size() << "zebras" << endl;
+		cout << "Found" << contours_filtered.size() << "contours above size threshold" << endl;
 	}
 
 	vector<Rect> boundRect(contours_filtered.size());
@@ -150,25 +150,30 @@ void contoursBounded(Mat src) {
 	waitKey(0);
 }
 
-Mat extractContours(Mat dilated) {
-
+vector<vector<Point>> extractContours(Mat src) {
 	vector<vector<Point>> contours;
+	vector<vector<Point>> contours_filtered;
 	vector<Vec4i> hierarchy;
-
-	findContours(dilated,
+	cvtColor(src, src, COLOR_BGR2GRAY);
+	findContours(src,
 		contours,
 		hierarchy,
 		RETR_EXTERNAL,
 		CHAIN_APPROX_SIMPLE);
-	drawContours(dilated, contours, -1, Scalar(255, 0, 255), 2);
-	return dilated;
+	for (int i = 0; i < contours.size(); i++) {
+		int area = contourArea(contours[i]);
+		if (area > 15000) {
+			contours_filtered.push_back(contours[i]);
+		}
+	}
+	return contours_filtered;
 }
 
-void matchContoursSimple(vector<vector<Point>> contour_template, vector<vector<Point>> array_of_contours) {
+void matchContoursSimple(vector<vector<Point>> contour_temp, vector<vector<Point>> array_of_contours) {
 	double ans;
 	for (int i = 0; i < array_of_contours.size(); i++)
 	{
-		ans = matchShapes(contour_template[0], array_of_contours[i], CONTOURS_MATCH_I1, 0);
+		ans = matchShapes(contour_temp.back(), array_of_contours[i], CONTOURS_MATCH_I1, 0);
 		cout << ans << " ";
 	}
 }

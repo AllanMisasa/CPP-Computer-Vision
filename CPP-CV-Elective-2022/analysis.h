@@ -19,10 +19,11 @@ void i_am_blrrr(Mat src) {
     bilateralFilter(src, bilateral, i, i * 2, i / 2);
 
     block = preprocessing(block);
-    block = extractContours(block);
+    //block = extractContours(block);
 
     gaussian = preprocessing(gaussian);
-    gaussian = extractContours(gaussian);
+    
+    //gaussian = extractContours(gaussian);
 
     imshow("Block-filter", block);
     imshow("Gaussian blur", gaussian);
@@ -119,6 +120,7 @@ void examine_colors(Mat src) {
     createTrackbar("Red max", "Trackbars", &rmax, 255);
 
     while (true) {
+
         Scalar lower(bmin, gmin, rmin);
         Scalar upper(bmax, gmax, rmax);
 
@@ -130,6 +132,7 @@ void examine_colors(Mat src) {
         imshow("Masked image", masked_img);
 
         waitKey(1);
+
     }
 }
 

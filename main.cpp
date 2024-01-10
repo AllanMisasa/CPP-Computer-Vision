@@ -23,23 +23,34 @@ int hist_w = 512, hist_h = 400;
 int bin_w = cvRound( (double) hist_w/histSize );
 
 string path = "images/"; 	
-string image_path, image_path2, image_path3; 												// Path to image
+string image_path, image_path1, image_path2, image_path3; 												// Path to image
 
 //const int max_value_H = 360/2;
 //const int max_value = 255;
 //int low_H = 0, low_S = 0, low_V = 0;
 //int high_H = max_value_H, high_S = max_value, high_V = max_value;
 
-Mat img, pcb, out, hist, hist2, hist3, opencv, thresholded, hsv; 
+Mat img, pcb, pcb2, out, opencv, thresholded, hsv, proc, proc2; 
 Mat sobelx, sobely, sobelxy;
+vector<vector<Point>> contour_test;
+vector<vector<Point>> contour_template;
+
 
 int main() {
     image_path = path + "italy.jpg"; 										// Path to image
-    image_path2 = path + "pcb.jpg";
-    image_path3 = path + "opencv.jpg";
+    image_path1 = path + "pcb.jpg";
+    image_path2 = path + "opencv.jpg";
+    image_path3 = path + "pcb2.jpg";
 	img = imread(image_path, IMREAD_COLOR); 									// Read the file
-    pcb = imread(image_path2, IMREAD_COLOR);
-    opencv = imread(image_path3, IMREAD_COLOR);   
+    pcb = imread(image_path1, IMREAD_COLOR);
+    opencv = imread(image_path2, IMREAD_COLOR);   
+    pcb2 = imread(image_path3, IMREAD_COLOR); 									// Read the file
     
-    video_player();
+    proc = preprocessing(pcb);
+    proc2 = preprocessing(pcb2);
+    //getContourAreas(proc, pcb2);
+
+    contour_template = extractContours(pcb);
+    contour_test = extractContours(pcb2);
+    matchContoursSimple(contour_template, contour_test);
 }

@@ -44,7 +44,7 @@ void video_background_replace() {
     cap.release();
     destroyAllWindows();
 }
-
+/*
 void video_edge_detection() {
     VideoCapture cap("C:/opencv_videos/justdoit.avi");
 
@@ -75,7 +75,7 @@ void video_edge_detection() {
     video.release();
     destroyAllWindows();
 }
-
+*/
 void draw_rectangle(Mat src) {
     Point p1(30, 30);
     Point p2(255, 255);

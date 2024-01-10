@@ -10,7 +10,7 @@ Mat preprocessing(Mat img) {
 
     cvtColor(img, imgGray, COLOR_BGR2GRAY);
     GaussianBlur(img, imgBlur, Size(3, 3), 3, 0);
-    Canny(imgBlur, edges, 25, 150);
+    Canny(imgBlur, edges, 100, 200);
 
     Mat kernel = getStructuringElement(MORPH_RECT, Size(5, 5));
 
