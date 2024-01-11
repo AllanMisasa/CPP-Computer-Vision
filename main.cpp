@@ -52,5 +52,17 @@ int main() {
 
     contour_template = extractContours(pcb);
     contour_test = extractContours(img);
+    cout << "Contour size of template: " << contour_template.size() << endl;
+    //cout << "Template area: " << contourArea(contour_template[0]) << endl;
+
+    for (int i = 0; i < contour_template.size(); i++) {
+        cout << "Contour area of template: " << contourArea(contour_template[i]) << endl;
+    }
+
+    cout << "Contour size of test: " << contour_test.size() << endl;
+    for (int i = 0; i < contour_test.size(); i++) {
+        cout << "Contour area of test: " << contourArea(contour_test[i]) << endl;
+    }
+    
     matchContoursSimple(contour_template, contour_test);
 }
