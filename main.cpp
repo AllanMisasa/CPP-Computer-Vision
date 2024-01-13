@@ -8,6 +8,7 @@
 #include "CPP-CV-Elective-2022/thresholding.h"
 #include "CPP-CV-Elective-2022/pipelines.h"
 #include "CPP-CV-Elective-2022/cv_basic.h"
+#include "CPP-CV-Elective-2022/ocr.h"
 
 #include <iostream>
 
@@ -31,7 +32,7 @@ string image_path, image_path1, image_path2, image_path3; 												// Path to
 //int high_H = max_value_H, high_S = max_value, high_V = max_value;
 
 Mat img, pcb, pcb2, out, opencv, thresholded, hsv, proc, proc2, gogh; 
-Mat sobelx, sobely, sobelxy;
+vector<String> ocr_output;
 vector<vector<Point>> contour_test;
 vector<vector<Point>> contour_template;
 
@@ -65,4 +66,5 @@ int main() {
     }
     
     matchContoursSimple(contour_template, contour_test);
+    tess(pcb);
 }
