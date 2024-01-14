@@ -18,5 +18,3 @@ void tess(Mat src) {
     cout << outText << endl;
     ocr->End();
 }
-
-g++ main.cpp -o output `pkg-config --cflags --libs opencv4 tesseract` -std=c++17 && ./output

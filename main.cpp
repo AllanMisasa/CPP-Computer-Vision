@@ -65,6 +65,8 @@ int main() {
         cout << "Contour area of test: " << contourArea(contour_test[i]) << endl;
     }
     
-    matchContoursSimple(contour_template, contour_test);
-    tess(pcb);
+    //matchContoursSimple(contour_template, contour_test);
+    //contoursBounded(proc2);
+    //tess(pcb);
+    blobDetector(pcb);
 }

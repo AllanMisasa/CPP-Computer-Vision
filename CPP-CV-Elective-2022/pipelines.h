@@ -17,5 +17,5 @@ Mat preprocessing(Mat img) {
     dilate(edges, dilated, kernel);
     erode(dilated, eroded, kernel);
     //imwrite("C:/portfolio_images/image1.jpg", edges);
-    return dilated;
+    return eroded;
 }

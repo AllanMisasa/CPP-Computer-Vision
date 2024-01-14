@@ -35,25 +35,27 @@ Mat circle_detector(Mat src) {
 	return src;
 }
 
-Mat Blob_detector(Mat src) {
+Mat blobDetector(Mat src) {
 	SimpleBlobDetector::Params params; 	// Setup SimpleBlobDetector parameters.
 
 	params.minThreshold = 10;
 	params.maxThreshold = 200;
 
 	params.filterByArea = true;
-	params.minArea = 150;			// Filter out any blob object below 150 px in area
+	params.minArea = 170;				// Filter out any blob object below x pixels in area
+	params.maxArea = 300;			// Filter out any blob object above x pixels in area
 
 	params.filterByCircularity = true;
-	params.minCircularity = 0.7;	// Filter out any blob that is less circular in %
+	params.minCircularity = 0.8;		// Filter out any blob that is less circular in %. 0.785 is a square. 1 is a perfect circle.
+	params.maxCircularity = 1;
 
 	params.filterByConvexity = false;
 	params.minConvexity = 0.87;
+	params.maxConvexity = 1;
 
-	params.filterByInertia = false;
+	params.filterByInertia = false; 	// Filter by oblongity
 	params.minInertiaRatio = 0.7;
-
-	src = preprocessing(src);		
+	params.maxInertiaRatio = 1;
 
 	Mat image_with_keypoints;
 	Ptr<SimpleBlobDetector> detector = SimpleBlobDetector::create(params);
@@ -71,11 +73,6 @@ Mat Blob_detector(Mat src) {
 	return image_with_keypoints;
 }
 
-/*
-getContours() takes as input first the binary image that needs contour approximation
-The second input is the original image, so we can overpaint the contours.
-The for loop shows the areas of the detected contours
-*/
 void getContourAreas(Mat dilated, Mat src) {
 	vector<vector<Point>> contours;
 	vector<vector<Point>> contours_filtered;
@@ -101,17 +98,11 @@ void getContourAreas(Mat dilated, Mat src) {
 }
 
 void contoursBounded(Mat src) {
-	Mat imgBlur, edges, dilated;
-	Mat kernel = getStructuringElement(MORPH_RECT, Size(3, 3));
-	GaussianBlur(src, imgBlur, Size(3, 3), 3, 0);
-	Canny(imgBlur, edges, 25, 75);
-	dilate(edges, dilated, kernel);
-
 	vector<vector<Point>> contours;
 	vector<vector<Point>> contours_filtered;
 	vector<Vec4i> hierarchy;
 
-	findContours(dilated,
+	findContours(src,
 		contours,
 		hierarchy,
 		RETR_EXTERNAL,
@@ -134,6 +125,8 @@ void contoursBounded(Mat src) {
 	for (size_t i = 0; i < contours_filtered.size(); i++)
 	{
 		approxPolyDP(contours_filtered[i], contours_poly[i], 3, true);
+		double area = contourArea(contours_poly[i]);
+		cout << "Area of contour " << i << ": " << area << endl;
 		boundRect[i] = boundingRect(contours_poly[i]);
 		minEnclosingCircle(contours_poly[i], centers[i], radius[i]);
 	}
@@ -188,9 +181,6 @@ void matchContoursFull(Mat image, Mat temp) {
 	double ans = 0, result = 0;
 
 	Mat imageresult1, imageresult2;
-
-	//cvtColor(image, hsv_base, COLOR_BGR2HSV);
-	//cvtColor(temp, hsv_test1, COLOR_BGR2HSV);
 
 	vector<vector<Point>>contours1, contours2;
 	vector<Vec4i>hierarchy1, hierarchy2;
@@ -250,8 +240,6 @@ Mat contours_full(Mat src) {
 		RETR_EXTERNAL,
 		CHAIN_APPROX_SIMPLE);
 
-	// iterate through all the top-level contours,
-	// draw each connected component with its own random color
 	int idx = 0;
 	for (; idx >= 0; idx = hierarchy[idx][0])
 	{
@@ -264,7 +252,6 @@ Mat contours_full(Mat src) {
 }
 
 void simple_match(Mat image, Mat temp) {
-	// Perform template matching
 	Mat result;
 	matchTemplate(image, temp, result, TM_CCOEFF_NORMED);
 
@@ -275,7 +262,6 @@ void simple_match(Mat image, Mat temp) {
 	// Draw a rectangle around the best match
 	rectangle(image, maxLoc, Point(maxLoc.x + temp.cols, maxLoc.y + temp.rows), Scalar(255, 0, 255), 2);
 
-	// Display the image with the rectangle
 	imshow("Image", image);
 	waitKey(0);
 }
