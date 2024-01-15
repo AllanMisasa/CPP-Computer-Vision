@@ -42,15 +42,15 @@ Mat blobDetector(Mat src) {
 	params.maxThreshold = 200;
 
 	params.filterByArea = true;
-	params.minArea = 170;				// Filter out any blob object below x pixels in area
-	params.maxArea = 300;			// Filter out any blob object above x pixels in area
+	params.minArea = 80;				// Filter out any blob object below x pixels in area
+	params.maxArea = 200;			// Filter out any blob object above x pixels in area
 
 	params.filterByCircularity = true;
-	params.minCircularity = 0.8;		// Filter out any blob that is less circular in %. 0.785 is a square. 1 is a perfect circle.
+	params.minCircularity = 0.75;		// Filter out any blob that is less circular in %. 0.785 is a square. 1 is a perfect circle.
 	params.maxCircularity = 1;
 
-	params.filterByConvexity = false;
-	params.minConvexity = 0.87;
+	params.filterByConvexity = true;
+	params.minConvexity = 0.5;
 	params.maxConvexity = 1;
 
 	params.filterByInertia = false; 	// Filter by oblongity

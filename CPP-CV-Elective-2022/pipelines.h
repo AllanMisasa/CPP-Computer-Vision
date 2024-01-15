@@ -1,6 +1,7 @@
 #pragma once
 #include "opencv2/imgproc.hpp"
 #include "opencv2/highgui.hpp"
+#include "opencv2/photo.hpp"
 
 using namespace cv;
 
@@ -9,8 +10,10 @@ Mat preprocessing(Mat img) {
     Mat imgGray, imgBlur, edges, dilated, eroded;
 
     cvtColor(img, imgGray, COLOR_BGR2GRAY);
-    GaussianBlur(img, imgBlur, Size(3, 3), 3, 0);
-    Canny(imgBlur, edges, 100, 200);
+    //GaussianBlur(img, imgBlur, Size(5, 5), 3, 0);
+
+    edgePreservingFilter(img, imgBlur, 1, 0.4);
+    Canny(imgBlur, edges, 100, 255);
 
     Mat kernel = getStructuringElement(MORPH_RECT, Size(5, 5));
 

@@ -9,6 +9,7 @@
 #include "CPP-CV-Elective-2022/pipelines.h"
 #include "CPP-CV-Elective-2022/cv_basic.h"
 #include "CPP-CV-Elective-2022/ocr.h"
+#include "CPP-CV-Elective-2022/keypoint_matching.h"
 
 #include <iostream>
 
@@ -31,7 +32,7 @@ string image_path, image_path1, image_path2, image_path3; 												// Path to
 //int low_H = 0, low_S = 0, low_V = 0;
 //int high_H = max_value_H, high_S = max_value, high_V = max_value;
 
-Mat img, pcb, pcb2, out, opencv, thresholded, hsv, proc, proc2, gogh; 
+Mat img, pcb, pcb2, out, opencv, thresholded, hsv, proc, proc2, gogh, pills, proc3, sign1, sign2, sign3, terning1, terning2; 
 vector<String> ocr_output;
 vector<vector<Point>> contour_test;
 vector<vector<Point>> contour_template;
@@ -46,9 +47,17 @@ int main() {
     pcb = imread(image_path1, IMREAD_COLOR);
     gogh = imread(image_path2, IMREAD_COLOR);   
     pcb2 = imread(image_path3, IMREAD_COLOR); 									// Read the file
-    
+    pills = imread("images/pills.jpg", IMREAD_COLOR); 									// Read the file
+    sign1 = imread("images/sign1.jpg", IMREAD_COLOR); 									// Read the file
+    sign2 = imread("images/sign2.jpg", IMREAD_COLOR); 									// Read the file
+    sign3 = imread("images/ref.jpg", IMREAD_COLOR); 									// Read the file
+    terning1 = imread("images/tern1.png", IMREAD_COLOR); 									// Read the file
+    terning2 = imread("images/tern1x.png", IMREAD_COLOR); 									// Read the file
+
     proc = preprocessing(pcb);
     proc2 = preprocessing(pcb2);
+    proc3 = preprocessing(pills);
+
     //getContourAreas(proc, pcb2);
 
     contour_template = extractContours(pcb);
@@ -68,5 +77,6 @@ int main() {
     //matchContoursSimple(contour_template, contour_test);
     //contoursBounded(proc2);
     //tess(pcb);
-    blobDetector(pcb);
+    //blobDetector(terning1);
+    sift_matching(sign2, sign3);
 }
